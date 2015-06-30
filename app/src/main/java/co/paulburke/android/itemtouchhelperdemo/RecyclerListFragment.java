@@ -55,9 +55,12 @@ public class RecyclerListFragment extends Fragment implements RecyclerListAdapte
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //设置自定义的 ItemTouchHelper.Callback
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
+        //attach to recyclerView
         mItemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
 
     @Override

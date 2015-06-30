@@ -43,18 +43,7 @@ import co.paulburke.android.itemtouchhelperdemo.helper.ItemTouchHelperViewHolder
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
         implements ItemTouchHelperAdapter {
 
-    /**
-     * Listener for manual initiation of a drag.
-     */
-    public interface OnStartDragListener {
 
-        /**
-         * Called when a view is requesting a start of a drag.
-         *
-         * @param viewHolder The holder of the view to drag.
-         */
-        void onStartDrag(RecyclerView.ViewHolder viewHolder);
-    }
 
     private static final String[] STRINGS = new String[]{
             "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"
@@ -81,6 +70,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.textView.setText(mItems.get(position));
 
         // Start a drag whenever the handle view it touched
+        //图片触摸的时候调用 ItemTouchHelper 的 startDrag方法拖动item
         holder.handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -92,15 +82,22 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         });
     }
 
+    /**
+     * ItemTouchHelperAdapter dismiss item 删除时的回调
+     * @param position The position of the item dismissed.
+     *
+     */
     @Override
     public void onItemDismiss(int position) {
         mItems.remove(position);
-        notifyItemRemoved(position);
+        notifyItemRemoved(position); //必须调用此方法刷新adapter
     }
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
+        //list交换fromPosition和toPosition索引位置的元素
         Collections.swap(mItems, fromPosition, toPosition);
+        //通知item位置的互换
         notifyItemMoved(fromPosition, toPosition);
     }
 
@@ -134,5 +131,18 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         public void onItemClear() {
             itemView.setBackgroundColor(0);
         }
+    }
+
+    /**
+     * Listener for manual initiation of a drag.
+     */
+    public interface OnStartDragListener {
+
+        /**
+         * Called when a view is requesting a start of a drag.
+         *
+         * @param viewHolder The holder of the view to drag.
+         */
+        void onStartDrag(RecyclerView.ViewHolder viewHolder);
     }
 }
