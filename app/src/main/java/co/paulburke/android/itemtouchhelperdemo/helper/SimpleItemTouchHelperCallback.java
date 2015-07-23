@@ -68,9 +68,16 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        // Enable drag and swipe in both directions
+        // Enable drag and swipe in both directions 针对的情况是 LinearLayoutManager
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN; //上下拖拽
         final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END; //左向右 右向左滑都可以
+        //如果要在GridLayoutManager中支持拖拽需做以下更改
+        /**
+         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN
+                               ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+         final int swipeFlags = 0; //实际中 grid模式很少有滑动删除的情况，所有传0 就ok
+         *
+         */
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
